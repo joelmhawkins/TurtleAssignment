@@ -136,3 +136,27 @@ prediction_data <- data.frame(sales.NA_Sales = c(34.02, 3.93, 2.73, 2.26, 22.08)
 predictions <- predict(lm_model, newdata = prediction_data)
 prediction_data$predicted_sales <- predictions
 prediction_data
+
+# Exploration of data - how customers accrue loyalty points
+# Load the reviews data
+raw_reviews<- read.csv(file.choose(), header = TRUE)
+
+# Preview the reviews data
+head(raw_reviews)
+
+# Check for any null values in the dataframe
+null_count_reviews <- colSums(is.na(raw_reviews))
+null_count_reviews
+
+# Check Data Types
+reviews_types <- sapply(raw_reviews, class)
+reviews_types
+
+# Plotting the relationship between Remuneration, Spending Score & Loyalty Points
+ggplot(raw_reviews, aes(x = remuneration..k.., y = spending_score..1.100.)) + geom_point() + ggtitle("Remuneration vs Spending Score")
+ggplot(raw_reviews, aes(x = spending_score..1.100., y = loyalty_points)) + geom_point() + ggtitle("Spending Score vs Loaylty Points")
+ggplot(raw_reviews, aes(x = remuneration..k.., y = loyalty_points)) + geom_point() + ggtitle("Remuneration vs Loyalty Points")
+
+# Linear Regression Model
+lm_model_reviews <- lm(formula = loyalty_points ~ remuneration..k.. + spending_score..1.100., data = raw_reviews)
+summary(lm_model_reviews)
